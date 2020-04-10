@@ -61,6 +61,8 @@ export default class Convo extends Component {
       fetchUserInfo: true,
       defaultStyle: defaultStyle,
       userDetails: {},
+      showPopUp: false,
+      choice: {},
       empty: {
         identity: "empty",
         prompt:
@@ -161,9 +163,12 @@ export default class Convo extends Component {
   };
 
   componentDidMount = async () => {
-    console.log("training", this.props.chat_body);
+    if (this.props.settings.showPopUp) this.count = -1;
     await this.getBrowser();
-    this.setState({ training: this.props.training });
+    this.setState({
+      training: this.props.training,
+      showPopUp: this.props.settings.showPopUp,
+    });
     // console.log("chat body", this.props.chat_body);
     // console.log("windows location href", window.location.href);
     // console.log("document referer", document.referrer);
@@ -191,7 +196,7 @@ export default class Convo extends Component {
         });
         this.getConversationTree();
       }
-      if (this.count < 2) {
+      if (this.count < 2 && !this.state.showPopUp) {
         const key = this.searchKeywordsFromUserInput(userInput);
 
         const find_key = (await this.setUserDetails(userInput)) || key;
@@ -201,12 +206,13 @@ export default class Convo extends Component {
         const conversationTree = [...this.state.conversationTree];
         const searchEngine = new SearchEngine(conversationTree);
         const result = await searchEngine.search(userInput);
-        console.log("search result", result);
+        console.log("search result5", result);
         const key = result.identity;
         conversationTree.push(result);
         await this.setState({
           conversationTree,
           userIsKnown: true,
+          choice: { key, val: userInput },
         });
         this.updateConverstion(key, userInput);
       }
@@ -384,8 +390,18 @@ export default class Convo extends Component {
 
   updateConverstion = (key, val = null) => {
     const choices = this.deepCopy(this.state.responses);
-    console.log("choices", choices);
+    console.log("choices", key, val);
+
     if (val) {
+      if (
+        this.state.showPopUp &&
+        !this.state.choice.val &&
+        key !== "delay_prompt"
+      ) {
+        this.setState({ choice: { key, val } });
+        this.popUpConvoCount = 1;
+      }
+
       const userChoice = {
         selection: val,
         time: this.setTimeOfChat(),
@@ -468,7 +484,18 @@ export default class Convo extends Component {
       }, 100);
     }
   };
+  popUpConvoCount = 0;
   refreshConvo = (key, choices) => {
+    console.log(
+      "count",
+      this.count,
+      "pop-up",
+      this.popUpConvoCount,
+      "isShowPup",
+      this.state.showPopUp
+    );
+    const conversationTree = [...this.state.conversationTree];
+    let searchResult;
     this.setState({ showProgress: true });
     if (!this.state.closeChat) {
       const responses = this.deepCopy(choices);
@@ -479,14 +506,50 @@ export default class Convo extends Component {
       if (this.state.username) {
         info = `Thanks ${this.state.username}`;
       }
-      const searchResult = this.searchTree(key, info);
+      if (this.state.showPopUp && key !== "delay_prompt") {
+        conversationTree.unshift(this.state.firstConvo);
+        conversationTree.push({
+          identity: "prompt-for-name",
+          prompt: "Okay. Let's get to know you. What's your name ?",
+          response: {
+            buttons: [],
+          },
+        });
+        this.setState({
+          conversationTree,
+          userIsKnown: true,
+        });
+        if (this.popUpConvoCount === 0) {
+          searchResult = this.searchTree(this.state.firstConvo.identity, info);
+          this.popUpConvoCount += 1;
+          console.log("sach", searchResult, this.state.choice.val);
+        } else if (this.popUpConvoCount === 1) {
+          conversationTree.push({
+            identity: "prompt-for-name",
+            prompt: "Okay. Let's get to know you. What's your name ?",
+            response: {
+              buttons: [],
+            },
+          });
+          searchResult = this.searchTree("prompt-for-name");
+          console.log("sach2", searchResult, this.state.choice.val);
+
+          this.setState({ showPopUp: false });
+          this.count = 0;
+          this.closeChatCount = 0;
+        }
+      } else {
+        searchResult = this.searchTree(key, info);
+      }
 
       console.log("search result", searchResult);
-      const index = searchResult.length - 1;
       if (!this.state.trainingMode) {
         const { userDetails } = this.state;
         if (searchResult.prompt && key === "delay_prompt") {
-          if (this.count < 2) {
+          if (
+            this.count < 2 &&
+            (this.state.choice.val || !this.props.settings.showPopUp)
+          ) {
             if (this.count === 0) {
               searchResult.prompt = randomizeResponse(key, "name", userDetails);
               searchResult.response.buttons = [];
@@ -509,7 +572,9 @@ export default class Convo extends Component {
                 userDetails
               );
               searchResult.response.buttons = [];
-              this.setState({ closeChat: true });
+              this.setState({
+                closeChat: true,
+              });
             }
           } else {
             if (this.closeChatCount < 3) {
@@ -520,6 +585,12 @@ export default class Convo extends Component {
               );
               searchResult.response.buttons = [];
               this.closeChatCount += 1;
+              // if (!this.state.choice.val) {
+              //   this.setState({ showPopUp: true });
+              //   this.count = 0;
+              //   this.popUpConvoCount = 1;
+              // } else {
+              // }
             } else {
               if (this.closeChatCount === 3) {
                 searchResult.prompt = randomizeResponse(
@@ -528,7 +599,10 @@ export default class Convo extends Component {
                   userDetails
                 );
                 searchResult.response.buttons = [];
-                this.setState({ closeChat: true, userIsKnown: false });
+                this.setState({
+                  closeChat: true,
+                  userIsKnown: false,
+                });
               }
             }
           }
@@ -536,7 +610,9 @@ export default class Convo extends Component {
       } else {
         console.log("search result", searchResult);
         this.buildTrainingData(searchResult, choices);
-        this.setState({ currentKey: searchResult.response.text });
+        this.setState({
+          currentKey: searchResult.response.text,
+        });
       }
 
       responses.push(searchResult);
@@ -648,7 +724,19 @@ export default class Convo extends Component {
           return "invalid_email";
         } else {
           conversationTree.push(kyObject);
-          conversationTree.unshift(this.state.firstConvo);
+          if (this.state.choice.val) {
+            const { key, val } = this.state.choice;
+            const searchEngine = new SearchEngine(conversationTree);
+            const firstSelection = await searchEngine.search(val);
+
+            if (this.state.userDetails.name) {
+              firstSelection.prompt = `Thank you ${this.state.userDetails.name}. ${firstSelection.prompt}`;
+            }
+            console.log("value", firstSelection);
+            conversationTree.unshift(firstSelection);
+          } else {
+            conversationTree.unshift(this.state.firstConvo);
+          }
           const find_key = type === "name" ? `kyc_${type}` : identity;
 
           console.log("output", output);
@@ -933,7 +1021,7 @@ export default class Convo extends Component {
       },
       name: {
         identity: "kyc_name",
-        prompt: `Thanks ${value}. Can I get your email ?`,
+        prompt: `Thanks ${value}. I would also need your email so I can contact you in case anything breaks`,
         response: {
           buttons: [],
           text: "",

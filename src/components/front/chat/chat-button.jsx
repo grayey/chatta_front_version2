@@ -22,7 +22,7 @@ const ChatButton = (props) => {
   }, []);
   return (
     <OverlayTrigger
-      defaultShow={!props.openWindow}
+      defaultShow={!props.openWindow && props.showPopUp}
       delay={{ hide: showPopUp, show: 10000000000 }}
       placement="left"
       overlay={
@@ -40,7 +40,10 @@ const ChatButton = (props) => {
               <i className="fa fa-close"></i>
             </div>
             {props.settings.chatbotName ? (
-              <div className={`pop-up-content row ${className}`} onClick={props.onClick}>
+              <div
+                className={`pop-up-content row ${className}`}
+                onClick={props.onClick}
+              >
                 <div className="bot-image-holder col-sm-2">
                   <img src={props.settings.botImage} alt="" />
                 </div>

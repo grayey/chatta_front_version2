@@ -42,15 +42,14 @@ export default class Chat extends Component {
       botId: "",
       training: {},
       openWindow: false,
+      showPopUp: true,
     };
     this.appService = new AppService();
   }
   setWindow = () => {
     this.setState({ openWindow: true });
-    console.log("yes");
   };
   getResponder = (response) => {
-    console.log(response);
     this.setState({ isResponding: response });
   };
   render() {
@@ -129,12 +128,7 @@ export default class Chat extends Component {
                 <div className="row">
                   <div className="col-md-12">
                     <input
-                      type={
-                        this.state.count === 1 &&
-                        !this.state.settings.trainingMode
-                          ? "email"
-                          : "text"
-                      }
+                      type="text"
                       className="form-control"
                       value={this.state.textValue}
                       id="message-to-send"
@@ -182,6 +176,7 @@ export default class Chat extends Component {
             onClick={this.toggleChatDisplay}
             settings={this.state.settings}
             setWindow={this.setWindow}
+            showPopUp={this.state.showPopUp}
           />
         )}
       </div>
@@ -193,15 +188,12 @@ export default class Chat extends Component {
   }
   async componentDidMount() {
     const emeka = document.getElementById("emeka");
-    console.log("emeka", emeka);
     const params = query_string.parse(this.props.location.search);
     try {
       const result = await Axios.get(
         `${BASE_URL}/setting/${params.setting_id}`
       );
-      console.log("result", result);
       if (result.data) {
-        // const settings = result.data[result.data.length - 1];
         const settings = result.data.findTree.setting_id;
 
         settings.collectUserInfo = true;
@@ -221,38 +213,13 @@ export default class Chat extends Component {
           botId: result.data.findTree._id,
           defaultStyle: settings.templateSettings,
           display: "in-line",
+          showPopUp: settings.showPopUp,
         });
       }
       const data = await Axios.get(`${BASE_URL}/training/`).then((res) => {
         this.setState({ training: res.data });
       });
     } catch (e) {}
-
-    // Axios.get(`${BASE_URL}/setting`)
-    //   .then(res => {
-    //     const result = res.data[res.data.length - 1];
-    //     color = result.prima
-    //     console.log(result);
-    //     const settings = result.findTree.setting_id;
-    //     this.setState({
-    //       btnStyle: { backgroundColor: "#ffffff" },
-    //       chatbotName: settings.chatbotName,
-    //       delayTime: settings.delayTime,
-    //       primaryColor: settings.primaryColor,
-    //       secondaryColor: settings.secondaryColor,
-    //       botImage: settings.botImage
-    //     });
-    //   })
-    //   .catch(err => {});
-    // const appKey = window.location.href;
-    // console.log("API", appKey);
-    // this.setState({
-    //   btnStyle: { backgroundColor: "black" }
-    // });
-    // // $('#chat-opener').tooltip();orange
-    // $(document).ready(function () {orange
-    //     $('[data-toggle="tooltip"]'orange
-    // });
   }
 
   toggleChatDisplay = () => {
@@ -262,7 +229,6 @@ export default class Chat extends Component {
       count: 0,
       openWindow: true,
     });
-    // this.deleteVisit()
   };
 
   handleSubmit = (event) => {
