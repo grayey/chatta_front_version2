@@ -1,0 +1,20 @@
+.action-accordion {
+  padding: 0px !important;
+  transition: height 1s ease;
+}
+.accordion-header {
+  padding: 8px 0px 8px 0px;
+}
+.accordion-body {
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+.accordion-body .action-option {
+  margin-top: 10px;
+  margin-left: 12px;
+}
+
+.accordion-body .action-option label {
+  font-style: normal;
+  font-weight: 400;
+}

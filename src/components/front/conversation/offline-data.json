@@ -1,0 +1,265 @@
+{
+  "findTree": {
+    "chat_body": [
+      {
+        "identity": "5304db40-8570-11ea-9f26-81eb5d75f032",
+        "prompt": "Welcome to ITHorizons Limited. The following are the services that we offer",
+        "response": {
+          "buttons": [
+            {
+              "key": "53d21650-8570-11ea-9f26-81eb5d75f032",
+              "val": "Loan"
+            },
+            {
+              "key": "56d989f0-8570-11ea-9f26-81eb5d75f032",
+              "val": "Insurance"
+            },
+            {
+              "key": "59d9f8b0-8570-11ea-9f26-81eb5d75f032",
+              "val": "Mortgage"
+            }
+          ],
+          "text": ""
+        }
+      },
+      {
+        "identity": "53d21650-8570-11ea-9f26-81eb5d75f032",
+        "prompt": "Our loan services are of 3 types",
+        "response": {
+          "buttons": [
+            {
+              "key": "65a98020-8570-11ea-9f26-81eb5d75f032",
+              "val": "Long term"
+            },
+            {
+              "key": "687152b0-8570-11ea-9f26-81eb5d75f032",
+              "val": "Short term"
+            },
+            {
+              "key": "6c58ed20-8570-11ea-9f26-81eb5d75f032",
+              "val": "Medium term"
+            }
+          ],
+          "text": ""
+        }
+      },
+
+      {
+        "identity": "65a98020-8570-11ea-9f26-81eb5d75f032",
+        "prompt": "Our long term loans are repayable between 3 -  years",
+        "response": {
+          "buttons": [
+            {
+              "key": "97ff8c4554254ea-9f26-81eb5d75f032",
+              "val": "Request demo",
+              "callToAction": {
+                "type": "request-demo"
+              }
+            },
+            {
+              "key": "97ff8c4554254ea-9f26-81eb5d75f032",
+              "val": "Schedule meeting",
+              "callToAction": {
+                "type": "schedule-meeting"
+              }
+            }
+          ],
+          "text": ""
+        }
+      },
+      {
+        "identity": "56d989f0-8570-11ea-9f26-81eb5d75f032",
+        "prompt": "Insurance plans that we have comprises of the following",
+        "response": {
+          "buttons": [
+            {
+              "key": "7d977250-8570-11ea-9f26-81eb5d75f032",
+              "val": "Life Insurance"
+            },
+            {
+              "key": "8180ba70-8570-11ea-9f26-81eb5d75f032",
+              "val": "Health Insurance"
+            },
+            {
+              "key": "86730e20-8570-11ea-9f26-81eb5d75f032",
+              "val": "Car Insurance"
+            }
+          ],
+          "text": ""
+        }
+      },
+      {
+        "identity": "7d977250-8570-11ea-9f26-81eb5d75f032",
+        "prompt": "We offer world class life insurance services which is comparitively affordable. Kindly schedule a meeting with us",
+        "response": {
+          "buttons": [
+            {
+              "key": "jhhjjm66-8570-11ea-9f26-81eb5d75f032",
+              "val": "Schedule meeting",
+              "callToAction": { "type": "schedule-meeting" }
+            }
+          ],
+          "text": ""
+        }
+      },
+      {
+        "identity": "59d9f8b0-8570-11ea-9f26-81eb5d75f032",
+        "prompt": "Mortgage services that we offer are composed of the following",
+        "response": {
+          "buttons": [
+            {
+              "key": "97ff8c40-8570-11ea-9f26-81eb5d75f032",
+              "val": "House"
+            },
+            {
+              "key": "9a304ef0-8570-11ea-9f26-81eb5d75f032",
+              "val": "Land"
+            },
+            {
+              "key": "9dcde810-8570-11ea-9f26-81eb5d75f032",
+              "val": "Real Estate"
+            }
+          ],
+          "text": ""
+        }
+      },
+      {
+        "identity": "9dcde810-8570-11ea-9f26-81eb5d75f032",
+        "prompt": "Our Mortgage solutions for Real Rstate services are the best amongst equal. We are delighted to let you know that our services have been patronized by many globally known celebrities",
+        "response": {
+          "buttons": [
+            {
+              "key": "97ff8c4554254ea-9f26-81eb5d75f032",
+              "val": "Schedule meeting",
+              "callToAction": {
+                "type": "schedule-meeting"
+              }
+            },
+            {
+              "key": "97ff8c4554254ea-9f26-81eb5d75f032",
+              "val": "Request demo",
+              "callToAction": {
+                "type": "request-demo"
+              }
+            }
+          ],
+          "text": ""
+        }
+      },
+      {
+        "identity": "empty",
+        "prompt": "Sorry. I couldn't understand your message",
+        "response": {
+          "buttons": [
+            {
+              "key": "53d21650-8570-11ea-9f26-81eb5d75f032",
+              "val": "Loan"
+            },
+            {
+              "key": "56d989f0-8570-11ea-9f26-81eb5d75f032",
+              "val": "Insurance"
+            },
+            {
+              "key": "59d9f8b0-8570-11ea-9f26-81eb5d75f032",
+              "val": "Mortgage"
+            }
+          ],
+          "text": ""
+        }
+      },
+      {
+        "identity": "delay_prompt",
+        "prompt": "How far nah? Still online ?",
+        "response": {
+          "buttons": [
+            {
+              "key": "53d21650-8570-11ea-9f26-81eb5d75f032",
+              "val": "Loan"
+            },
+            {
+              "key": "56d989f0-8570-11ea-9f26-81eb5d75f032",
+              "val": "Insurance"
+            },
+            {
+              "key": "59d9f8b0-8570-11ea-9f26-81eb5d75f032",
+              "val": "Mortgage"
+            }
+          ],
+          "text": ""
+        }
+      }
+    ],
+    "_id": "5ea1631c83fd560017aa903b",
+    "settings": {
+      "_id": "5ea1612283fd560017aa903a",
+      "chatbotName": "Mekus",
+      "fallbackMessage": "Sorry. I couldn't understand your message",
+      "delayPrompt": "How far nah? Still online ?",
+      "botImage": "https://firebasestorage.googleapis.com/v0/b/chatta-fb07a.appspot.com/o/images%2FScreenshot%20from%202020-04-11%2023-08-11.png?alt=media&token=2954e328-4361-49a7-ab28-a4bbc2c01d44",
+      "primaryColor": "#7384ad",
+      "secondaryColor": "#000000",
+      "delayTime": 30000,
+      "clientId": "5e216dcf5d43ed00175c2384",
+      "__v": 0,
+      "templateSettings": {
+        "selected": "botImage",
+        "hovered": "xx",
+        "styleSelected": "borderRadius",
+        "border": "1.28",
+        "fontSize": "10px",
+        "borderColor": "C5BABA",
+        "fillColor": "#e0e0d9",
+        "borderRadius": "50%",
+        "textColor": "#0e0d0d",
+        "headerBorderColor": "",
+        "headerFillColor": "#4f3d7c",
+        "headerBorder": "0px",
+        "botNameTextColor": "#ffffff",
+        "botNameFontSize": "16px",
+        "botOnlineFillColor": "#65b165",
+        "botOnlineNameTextColor": "#000000",
+        "botOnlineTimeTextColor": "#AE9999",
+        "botMessageFillColor": "#f1f1e8",
+        "botMessageTextTextColor": "#504848",
+        "botMessageBorder": "0px",
+        "botMessageBorderColor": "",
+        "botBodyFillColor": "#fdfdfd",
+        "closeButtonTextColor": "#ffffff",
+        "closeButtonFontSize": "25.6px",
+        "userOnlineFillColor": "#1ECB78",
+        "userOnlineNameTextColor": "#000000",
+        "userOnlineTimeTextColor": "#AE9999",
+        "userMessageFillColor": "#4f3d7c",
+        "userMessageBorder": "0px",
+        "userMessageBorderColor": "",
+        "userMessageTextTextColor": "#ffffff",
+        "optionFillColor": "#ffffff",
+        "optionBorderColor": "#2B72FC",
+        "optionBorder": "1.2px",
+        "optionTextColor": "#020101",
+        "inputFillColor": "#e0e0d9",
+        "inputTextColor": "#0e0d0d",
+        "inputBorder": "1.28",
+        "inputBorderColor": "C5BABA",
+        "inputFontSize": "10px",
+        "botBodyBorderRadius": "0px",
+        "botMessageBorderRadius": "13px",
+        "userMessageBorderRadius": "13px",
+        "optionBorderRadius": "6.4px",
+        "inputBorderRadius": "0px",
+        "botImageBorderRadius": "50%",
+        "botBodyBorder": "1.28",
+        "showNotification": "no",
+        "timeOut": 8000,
+        "saveClass": "",
+        "switchTab": true,
+        "setSetDefaultTemplate": false,
+        "notificationMessage": "Saved",
+        "userMessageTextColor": "#d8cbcb"
+      }
+    },
+    "clientId": "5e216dcf5d43ed00175c2384",
+    "created_at": "2020-04-23T09:42:52.841Z",
+    "__v": 0
+  }
+}

@@ -3,11 +3,11 @@ import React, {
   useEffect,
   useRef,
   useGlobal,
-  setGlobal
+  setGlobal,
 } from "reactn";
 import "./css/tag-overlay.css";
 
-const TagOverlay = props => {
+const TagOverlay = (props) => {
   const [returnTags] = useGlobal("returnTags");
 
   const [tags, setTags] = useState(returnTags(props.botKey));
@@ -17,7 +17,7 @@ const TagOverlay = props => {
   const scrollBar = document.getElementById("chat_bottom");
 
   console.log("return tags", returnTags(props.botKey));
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const optionTags = [...tags];
 
@@ -30,7 +30,7 @@ const TagOverlay = props => {
         console.log("yes");
         setTimeout(() => {
           scrollBar.scrollIntoView({
-            behavior: "smooth"
+            behavior: "smooth",
           });
         }, 10);
       }
@@ -46,7 +46,6 @@ const TagOverlay = props => {
     }
   };
   const handleSave = () => {
-
     addTags(tags, props.botKey);
     showTagOverlay(false);
   };
@@ -71,7 +70,7 @@ const TagOverlay = props => {
                   className="form-controlw"
                   placeholder="Enter your tag"
                   value={inputTag}
-                  onChange={event => {
+                  onChange={(event) => {
                     setInputTag(event.target.value);
                   }}
                 ></input>

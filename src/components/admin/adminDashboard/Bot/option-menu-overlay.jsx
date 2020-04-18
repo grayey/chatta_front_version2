@@ -1,8 +1,7 @@
 import React, { useState, Component } from "reactn";
 import Popover from "react-bootstrap/Popover";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Button from "react-bootstrap/Button";
-import TagOverlay from "./tag-overlay";
+import CallToAction from "./call-to-action-accordion";
 
 import "./css/option-menu.css";
 
@@ -11,17 +10,21 @@ class Example extends Component {
     fallback: false,
     delayprompt: false,
     delete: false,
-    showTagOverlay: false
+    showTagOverlay: false,
+    actionSelected: "",
   };
-
-  handleCheck = event => {
+  setAction = (action) => {
+    this.setState({ actionSelected: action });
+    this.global.setCallToAction({ type: action }, this.props.botKey);
+  };
+  handleCheck = (event) => {
     if (event.target.name === "fallback") {
       this.setState({ fallback: !this.state.fallback });
       this.props.syncTree(null, null, {
         type: event.target.id,
         botKey: this.props.botKey,
         response: this.props.res,
-        fallback: !this.state.fallback
+        fallback: !this.state.fallback,
       });
     }
     if (event.target.name === "delayprompt") {
@@ -30,7 +33,7 @@ class Example extends Component {
         type: event.target.id,
         botKey: this.props.botKey,
         response: this.props.res,
-        delayprompt: !this.state.delayprompt
+        delayprompt: !this.state.delayprompt,
       });
     }
   };
@@ -40,8 +43,8 @@ class Example extends Component {
       modify: this.props.modifyOption,
       key: this.props.botKey,
       options: {
-        type: "delete"
-      }
+        type: "delete",
+      },
     });
   };
   handleEdit = () => {
@@ -52,11 +55,11 @@ class Example extends Component {
       key: this.props.botKey,
       options: {
         type: "edit",
-        text: this.props.res
-      }
+        text: this.props.res,
+      },
     });
   };
-  openTag = open => {
+  openTag = (open) => {
     const key = this.props.botKey;
     console.log("keys", this.props.botKey);
     this.global.showTagOverlay(open, key);
@@ -67,6 +70,7 @@ class Example extends Component {
         <OverlayTrigger
           trigger="click"
           placement="right"
+          rootClose={false}
           overlay={
             <Popover id="popover-basic">
               <div className="animated">
@@ -87,6 +91,14 @@ class Example extends Component {
                   <Popover.Content>
                     <i class="fas fa-attachment"></i>{" "}
                     <span style={{ marginLeft: "5px" }}>Add keywords</span>
+                  </Popover.Content>
+                </div>
+                <div>
+                  <Popover.Content>
+                    <CallToAction
+                      actionSelected={this.state.actionSelected}
+                      setAction={this.setAction}
+                    />
                   </Popover.Content>
                 </div>
                 <div
@@ -152,14 +164,14 @@ class Example extends Component {
       chatTree[chatTree.length - 2]
     ) {
       const optionTree = this.global.chatTree.filter(
-        tree => tree.identity === option
+        (tree) => tree.identity === option
       );
       const treeButtons = optionTree[0].response.buttons;
       let Keys = [];
-      treeButtons.forEach(button => {
+      treeButtons.forEach((button) => {
         Keys.push(button.key);
       });
-      Keys.forEach(key => {
+      Keys.forEach((key) => {
         if (key === this.props.botKey) {
           this.setState({ [checkBox]: true });
         }

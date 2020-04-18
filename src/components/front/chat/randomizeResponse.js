@@ -1,5 +1,5 @@
 const randomizeResponse = (key, type, userDetails) => {
-  console.log("this is key", key)
+  console.log("this is key", key);
   const index = Math.floor(Math.random() * 4);
   const name = userDetails.name;
   const responses = {
@@ -9,7 +9,7 @@ const randomizeResponse = (key, type, userDetails) => {
         "I haven't got your name yet. Could you leave your name below ?",
         "I am yet to get your name. Kindly enter your name below",
         "Are you there ? Please tell me your name",
-        "Hello there. What's your name ?"
+        "Hello there. What's your name ?",
       ],
       email: [
         `Hello ${name ? name : "there"}. What's your email address ?`,
@@ -18,14 +18,14 @@ const randomizeResponse = (key, type, userDetails) => {
         `Hi ${
           name ? name : ""
         }...You haven't been responsive. I will need your email address so we can proceed`,
-        `Hi ${name ? name : "there"}. Kindly respond with your email`
+        `Hi ${name ? name : "there"}. Kindly respond with your email`,
       ],
       random: [
         `Hello ${name ? name : "there"}. Are you there ?`,
         ` ${name ? name : ""} Are you still online ?`,
         `I haven't got any response ${name ? name : ""}. Are you there ?`,
         `Hi ${name ? name : ""}. Are you with me ?`,
-        `Hi ${name ? name : "there"}. You there ?`
+        `Hi ${name ? name : "there"}. You there ?`,
       ],
       offline: {
         withEmail: [
@@ -41,7 +41,7 @@ const randomizeResponse = (key, type, userDetails) => {
           }. It seems you've been offline for a while. Kindly check your inbox for a follow-up mail we just sent you. Have a nice day`,
           `Hello ${
             name ? name : "there"
-          }. You've been away for a while. Your concerns mean a lot to us and we just sent you a mail just in case you'd want to contact one of our agents at your convenience. Thank you !`
+          }. You've been away for a while. Your concerns mean a lot to us and we just sent you a mail just in case you'd want to contact one of our agents at your convenience. Thank you !`,
         ],
         withoutEmail: [
           `Hello ${
@@ -55,23 +55,22 @@ const randomizeResponse = (key, type, userDetails) => {
           }. You've not been responding. Your concerns mean a lot to us. In case you'd like to reach us via mail, kindly send us a mail via amin@ith.com`,
           `Hi ${
             name ? name : "there"
-          }. I haven't gotten any response from you. Feel free to reach us at admin@ith.com if you have more enquiries. Thanks and enjoy the rest of your day`
-        ]
-      }
+          }. I haven't gotten any response from you. Feel free to reach us at admin@ith.com if you have more enquiries. Thanks and enjoy the rest of your day`,
+        ],
+      },
     },
     invalidEmailResponse: [
-      "Please cross-check your email address for errors and try again",
-      `Kindly check your email format for errors. A good example is ${name ? name
-        .toLowerCase().split(" ")
-        .slice(0, 2)
-        .join("_"):null}${index}@gmail.com`,
-      `Sorry ${name ||
-        ""}, it looks like you didn't quite provide a valid email. kindly cross-check`,
-      `We will need a valid email address... something like ${name ? name
-        .toLowerCase().split(" ")
-        .slice(0, 2)
-        .join("_"):null}${index}@gmail.com`
-    ]
+      "Uhmmm.. it seems there is a typo in your email. Kindly cross-check",
+      `Kindly check your email format for errors. A good example is ${
+        name ? name.toLowerCase().split(" ").slice(0, 2).join("_") : null
+      }${index}@gmail.com`,
+      `Sorry ${
+        name || ""
+      }, it looks like you didn't quite provide a valid email. kindly cross-check`,
+      `We will need a valid email address... something like ${
+        name ? name.toLowerCase().split(" ").slice(0, 2).join("_") : null
+      }${index}@gmail.com`,
+    ],
   };
   if (type === "offline") {
     if (userDetails.email) {
@@ -79,9 +78,8 @@ const randomizeResponse = (key, type, userDetails) => {
     } else {
       return responses[key][type].withoutEmail[index];
     }
-  }
-  else if(!type) {
-    return responses[key][index]
+  } else if (!type) {
+    return responses[key][index];
   }
   return responses[key][type][index];
 };

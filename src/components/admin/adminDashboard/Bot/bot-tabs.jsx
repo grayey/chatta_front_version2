@@ -45,29 +45,29 @@ class BotTabs extends Component {
     deployed: false,
     stateChanged: false,
     settings_id: "",
-    template: Template
+    template: Template,
     // displayState: "none"
   };
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
     if (this.state.deployed) {
       this.setState({ stateChanged: true });
     }
   };
 
-  fileSelectedHandler = event => {
+  fileSelectedHandler = (event) => {
     if (event.target.files[0]) {
       const fileInput = event.target.files[0];
       this.setState({
         fileUpload: fileInput,
-        file: event.target.files[0].name
+        file: event.target.files[0].name,
       });
     }
     return null;
   };
-  saveData = url => {
+  saveData = (url) => {
     const clientId = JSON.parse(localStorage.getItem("userdetails")).id;
     console.log("clientId", clientId);
     const setting = {
@@ -78,7 +78,7 @@ class BotTabs extends Component {
       primaryColor: this.state.primaryColor,
       secondaryColor: this.state.secondaryColor,
       delayTime: this.state.delayTime,
-      deployed: false
+      deployed: false,
     };
 
     /* if users comes back to settings tab to modify the settings
@@ -90,21 +90,21 @@ class BotTabs extends Component {
 
         apiService
           .put(`setting/${this.state.settings._id}`, setting)
-          .then(res => {
+          .then((res) => {
             console.log("saved settings", res);
             this.setState({
               tab: "template",
               showProgress: false,
               settingsSaved: true,
-              settings: setting
+              settings: setting,
             });
           })
-          .catch(error => console.error("this is error", error));
+          .catch((error) => console.error("this is error", error));
       } else {
         this.setState({
           settings: setting,
           tab: "template",
-          showProgress: false
+          showProgress: false,
         });
       }
     } else {
@@ -112,23 +112,23 @@ class BotTabs extends Component {
       apiService
         .post("setting", {
           ...setting,
-          clientId: clientId
+          clientId: clientId,
         })
-        .then(res => {
+        .then((res) => {
           console.log("saved settings", res);
           this.setState({
             tab: "template",
             showProgress: false,
             settingsSaved: true,
-            settings: res
+            settings: res,
           });
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     }
   };
-  handleSubmit = async event => {
+  handleSubmit = async (event) => {
     event.preventDefault();
     const { fileUpload } = this.state;
 
@@ -143,12 +143,12 @@ class BotTabs extends Component {
         .put(fileUpload);
       uploadTask.on(
         "state_changed",
-        snapshot => {
+        (snapshot) => {
           // progrss function ....
           // const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
           // this.setState({progress});
         },
-        error => {
+        (error) => {
           // error function ....
           console.log(error);
         },
@@ -158,7 +158,7 @@ class BotTabs extends Component {
             .ref("images")
             .child(fileUpload.name)
             .getDownloadURL()
-            .then(url => {
+            .then((url) => {
               this.saveData(url);
             });
         }
@@ -167,18 +167,18 @@ class BotTabs extends Component {
     }
   };
 
-  setTab = tab => {
+  setTab = (tab) => {
     this.setState({ tab });
   };
-  getTab = async tab => {
+  getTab = async (tab) => {
     if (this.state.settingsSaved) {
       return tab || this.state.tab;
     }
   };
-  setDefaultTemplate = template => {
+  setDefaultTemplate = (template) => {
     this.setState({ template: template || this.props.template });
   };
-  setTemplateSettings = templateSettings => {
+  setTemplateSettings = (templateSettings) => {
     this.global.showImportOverlay(false);
     const newSettings = { ...this.state.settings };
     newSettings.templateSettings = templateSettings;
@@ -186,7 +186,7 @@ class BotTabs extends Component {
     console.log("new settings", newSettings);
 
     this.setState({
-      settings: newSettings
+      settings: newSettings,
     });
   };
   changeState = (state = true) => {
@@ -237,7 +237,7 @@ class BotTabs extends Component {
                     <p
                       style={{
                         display: `none`,
-                        color: "red"
+                        color: "red",
                       }}
                     >
                       Please update all Fields to continue...
@@ -278,7 +278,7 @@ class BotTabs extends Component {
                             // className="form-control"
                             name="primaryColor"
                             style={{
-                              width: "100%"
+                              width: "100%",
                             }}
                           />
                         </Col>
@@ -291,7 +291,7 @@ class BotTabs extends Component {
                             name="secondaryColor"
                             value={this.state.secondaryColor}
                             style={{
-                              width: "100%"
+                              width: "100%",
                             }}
 
                             // className="form-control"
@@ -361,7 +361,7 @@ class BotTabs extends Component {
 
                   export: true,
                   save: true,
-                  deploy: true
+                  deploy: true,
                 }}
               />
             </div>
@@ -396,9 +396,9 @@ class BotTabs extends Component {
               <div className="card-body">
                 <CreateIntent
                   stateChanged={this.state.stateChanged}
-                  setDeploymentStatus={status => {
+                  setDeploymentStatus={(status) => {
                     this.setState({
-                      deployed: status
+                      deployed: status,
                     });
                   }}
                   settings={this.state.settings}
@@ -431,7 +431,7 @@ class BotTabs extends Component {
                 import: true,
                 export: true,
                 save: true,
-                deploy: true
+                deploy: true,
               }}
             />
           </Tab>
@@ -464,7 +464,7 @@ class BotTabs extends Component {
                     import: true,
                     export: true,
                     save: true,
-                    deploy: true
+                    deploy: true,
                   }}
                 />
               </div>

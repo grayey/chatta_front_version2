@@ -10,7 +10,7 @@ let newTreeArray;
 let fallbackTree;
 let DelayPromptTree;
 
-const OptionBox = props => {
+const OptionBox = (props) => {
   console.log("props from option box", props);
   console.log("this is the new props", props);
   const [responses, setResponses] = useState([]);
@@ -32,12 +32,12 @@ const OptionBox = props => {
       fallbackTree = props.chatTree[props.chatTree.length - 2];
       DelayPromptTree = props.chatTree[props.chatTree.length - 1];
 
-      props.chatTree[0].response.buttons.forEach(button => {
+      props.chatTree[0].response.buttons.forEach((button) => {
         const body = {
           key: button.key,
           botKey: button.key,
           val: button.val,
-          identity: props.chatTree[0].identity
+          identity: props.chatTree[0].identity,
         };
         if (!initialResponses.indexOf(body) > -1) {
           initialResponses.push(body);
@@ -48,7 +48,7 @@ const OptionBox = props => {
         initialTree,
         ...identities,
         fallbackTree,
-        DelayPromptTree
+        DelayPromptTree,
       ];
       if (!rendered) {
         setResponses(initialResponses);
@@ -76,7 +76,7 @@ const OptionBox = props => {
   4.For each button found in 3, repeat step 2
   */
 
-  const findAndDelete = botId => {
+  const findAndDelete = (botId) => {
     /*
     first check if deleted option serves as an option for fallback or delay prompt message.
     If so, remove them from delayprompt and/Or fallback options
@@ -105,20 +105,20 @@ const OptionBox = props => {
     }
     let optionButtons = [];
 
-    const convo = identities.filter(convo => convo.identity === botId);
+    const convo = identities.filter((convo) => convo.identity === botId);
     if (convo.length) {
       const buttons = convo[0].response.buttons;
       identities.splice(identities.indexOf(convo[0]), 1); // deletes convo
-      buttons.forEach(button => optionButtons.push(button));
+      buttons.forEach((button) => optionButtons.push(button));
     }
     for (let index = 0; index < optionButtons.length; index++) {
       const convoTree = identities.filter(
-        convo => convo.identity === optionButtons[index].key
+        (convo) => convo.identity === optionButtons[index].key
       );
       if (convoTree.length) {
         const buttons = convoTree[0].response.buttons;
         identities.splice(identities.indexOf(convoTree[0]), 1);
-        buttons.forEach(button => optionButtons.push(button));
+        buttons.forEach((button) => optionButtons.push(button));
       }
     }
   };
@@ -146,16 +146,16 @@ const OptionBox = props => {
       }
     }
   };
-  const returnTags = botId => {
+  const returnTags = (botId) => {
     let tags = [];
-    const convo = newTreeArray.filter(chat => {
+    const convo = newTreeArray.filter((chat) => {
       if (chat) {
         const button = chat.response.buttons.filter(
-          button => button.key === botId
+          (button) => button.key === botId
         );
         if (button[0]) {
-          tags.push(button[0].val)
-          tags = button[0].tags ? button[0].tags : tags
+          tags.push(button[0].val);
+          tags = button[0].tags ? button[0].tags : tags;
           console.log("buttons", button);
         }
 
@@ -164,11 +164,11 @@ const OptionBox = props => {
     });
     return tags;
   };
-  const addTags = (tags, botId, action) => {
-    const convo = newTreeArray.filter(chat => {
+  const addTags = (tags, buttonKey, action) => {
+    const convo = newTreeArray.filter((chat) => {
       if (chat) {
         const button = chat.response.buttons.filter(
-          button => button.key === botId
+          (button) => button.key === buttonKey
         );
         if (button[0]) {
           button[0].tags = tags;
@@ -177,7 +177,23 @@ const OptionBox = props => {
       }
     });
 
-    console.log("tags", tags, botId, convo);
+    console.log("tags", tags, buttonKey, convo);
+  };
+
+  const setCallToAction = (callToAction, buttonKey, action) => {
+    const convo = newTreeArray.filter((chat) => {
+      if (chat) {
+        const button = chat.response.buttons.filter(
+          (button) => button.key === buttonKey
+        );
+        if (button[0]) {
+          button[0].callToAction = callToAction;
+        }
+        return button;
+      }
+    });
+
+    console.log("action", callToAction, buttonKey, convo);
   };
   /*
   syncTree function builds the chat tree including also the fallback and delay prompt body
@@ -194,13 +210,13 @@ const OptionBox = props => {
           prompt: props.settings.fallbackMessage,
           response: {
             buttons: [{ key: message.botKey, val: message.response }],
-            text: ""
-          }
+            text: "",
+          },
         };
         if (fallbackTree && !message.fallback) {
           const options = fallbackTree.response.buttons;
           const isFound = options.filter(
-            fallback => fallback.key === message.botKey
+            (fallback) => fallback.key === message.botKey
           );
           if (isFound.length) {
             const index = options.indexOf(isFound[0]);
@@ -210,7 +226,7 @@ const OptionBox = props => {
           if (fallbackTree) {
             fallbackTree.response.buttons.push({
               key: message.botKey,
-              val: message.response
+              val: message.response,
             });
           } else {
             fallbackTree = fallback;
@@ -224,13 +240,13 @@ const OptionBox = props => {
           prompt: props.settings.delayPrompt,
           response: {
             buttons: [{ key: message.botKey, val: message.response }],
-            text: ""
-          }
+            text: "",
+          },
         };
         if (DelayPromptTree && !message.delayprompt) {
           const options = DelayPromptTree.response.buttons;
           const isFound = options.filter(
-            delayprompt => delayprompt.key === message.botKey
+            (delayprompt) => delayprompt.key === message.botKey
           );
           if (isFound.length) {
             const index = options.indexOf(isFound[0]);
@@ -240,7 +256,7 @@ const OptionBox = props => {
           if (DelayPromptTree) {
             DelayPromptTree.response.buttons.push({
               key: message.botKey,
-              val: message.response
+              val: message.response,
             });
           } else {
             DelayPromptTree = delayprompt;
@@ -251,7 +267,7 @@ const OptionBox = props => {
       initialTree = initial;
     } else {
       const isFound = identities.filter(
-        botTree => tree.identity === botTree.identity
+        (botTree) => tree.identity === botTree.identity
       );
       if (isFound.length) {
         const index = identities.indexOf(isFound[0]);
@@ -299,7 +315,7 @@ const OptionBox = props => {
       findAndDelete(botId, convoButtons);
       // updates the chat UI
       const responseArray = initialResponses.filter(
-        response => response.botKey === botId
+        (response) => response.botKey === botId
       );
       initialResponses.splice(initialResponses.indexOf(responseArray[0]), 1);
       setResponses(initialResponses);
@@ -315,7 +331,7 @@ const OptionBox = props => {
       findAndEdit(botId, action.text);
       // update UI
       const responseArray = initialResponses.filter(
-        response => response.key === botId
+        (response) => response.key === botId
       );
       responseArray[0].val = action.text;
       setResponses(initialResponses);
@@ -332,12 +348,13 @@ const OptionBox = props => {
     modifyOption: modifyOption,
     findAndEdit,
     addTags,
-    returnTags
+    returnTags,
+    setCallToAction,
   });
   const checkDuplicate = (event, target) => {
     if (!target) {
       const isFound = initialResponses.filter(
-        response =>
+        (response) =>
           response.val.trim().toLowerCase() ===
           event.target.value.trim().toLowerCase()
       );
@@ -349,16 +366,16 @@ const OptionBox = props => {
         } else message = event.target.value;
         return {
           success: false,
-          message: `"${message}" already exists as an option`
+          message: `"${message}" already exists as an option`,
         };
       }
       return {
         success: true,
-        message: ""
+        message: "",
       };
     }
   };
-  const handleChange = e => {
+  const handleChange = (e) => {
     setResponse(e.target.value);
     setInputVal(e.target.value);
     const validation = checkDuplicate(e);
@@ -370,13 +387,13 @@ const OptionBox = props => {
   };
 
   const identity = uuid();
-  const handleClick = async res => {
+  const handleClick = async (res) => {
     const key = uuid();
     initialResponses.push({
       key,
       botKey: key,
       val: response,
-      identity
+      identity,
     });
     setResponses(initialResponses);
     setInputVal("");
@@ -386,8 +403,8 @@ const OptionBox = props => {
       prompt: props.prompt,
       response: {
         buttons: [{ key, val: response }],
-        text: ""
-      }
+        text: "",
+      },
     };
     if (initialTree) {
       initialTree.response.buttons.push({ key, val: response });
@@ -401,11 +418,11 @@ const OptionBox = props => {
     <div
       style={{
         marginLeft: !props.marginLeft ? "40px" : props.marginLeft,
-        marginRight: "100px"
+        marginRight: "100px",
       }}
       className="form-group"
     >
-      {responses.map(res => (
+      {responses.map((res) => (
         <Accordion
           res={res.val}
           key={res.key}

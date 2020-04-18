@@ -380,6 +380,7 @@ export default class Convo extends Component {
   error = 0;
   saveConversation = (content) => {
     content.error = this.error;
+    console.log("content", content)
     this.conversations.push(content);
     this.props.socketIo.emit("updateConversation", this.conversations);
   };

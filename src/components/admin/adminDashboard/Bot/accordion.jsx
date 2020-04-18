@@ -8,15 +8,15 @@ class Accordion extends Component {
     height: "0px",
     active: "",
     init: "0px",
-    newHeight: "0px"
+    newHeight: "0px",
   };
-  syncHeight = height => {
+  syncHeight = (height) => {
     const number = parseInt(this.state.height.match(/(\d+)/)[0], 10);
     console.log(this.state.init);
     const newHeight = this.state.init + height + number;
     this.setState({
       init: newHeight,
-      height: newHeight + this.divElement.clientHeight + "px"
+      height: newHeight + this.divElement.clientHeight + "px",
     });
   };
 
@@ -26,20 +26,20 @@ class Accordion extends Component {
       height:
         this.state.active === "active"
           ? "0px"
-          : this.state.init + this.divElement.clientHeight + "px"
+          : this.state.init + this.divElement.clientHeight + "px",
     });
   };
   setActive = () => (this.state.active === "" ? "active" : "");
   render() {
     return (
       <div
-        ref={divElement => (this.divElement = divElement)}
+        ref={(divElement) => (this.divElement = divElement)}
         className="accordion-section"
         style={{
           marginLeft: "50px",
           marginBottom: "10px",
           marginTop: "10px",
-          transition: "max-width 0.6s ease"
+          transition: "max-width 0.6s ease",
         }}
       >
         <CardView

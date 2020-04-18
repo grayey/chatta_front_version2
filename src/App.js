@@ -13,7 +13,6 @@ import Login from "./components/admin/adminDashboard/Authentication/Login";
 import ResetPassword from "./components/admin/adminDashboard/Authentication/reset-password";
 import VerifyNewPassword from "./components/admin/adminDashboard/Authentication/verify-new-password";
 
-
 import VerifyEmail from "./components/admin/adminDashboard/Authentication/emailVerification";
 import CompaniesComponent from "./components/admin/adminDashboard/companies/listCompanies";
 import BotUITemplate from "./components/admin/adminDashboard/Bot/bot-UI-template-design";
@@ -26,6 +25,8 @@ import { ProtectedRoute } from "./components/protectedRoutes";
 import FrontPage from "./components/front/landing-page/frontPage";
 import Charts from "./components/admin/adminDashboard/analytics/chart";
 import Visits from "./components/admin/adminDashboard/analytics/visits";
+import Convo from "./components/front/conversation/convo2";
+import CallToAction from "./components/admin/adminDashboard/Bot/call-to-action-accordion";
 import COnversationOverlay from "./components/admin/adminDashboard/analytics/visit-conversation-leads-overlay";
 import DatePicker from "../src/components/admin/adminDashboard/analytics/dates";
 import BotBody from "./components/admin/adminDashboard/Bot/bot-body";
@@ -40,6 +41,8 @@ function App() {
         <Route exact path="/chatbot" component={Chat}></Route>
         <Route exact path="/payment" component={PaymentPage}></Route>
         <Route exact path="/ithadmin" component={IthAdmin}></Route>
+        <Route exact path="/convo" component={Convo}></Route>
+        <Route exact path="/action" component={CallToAction}></Route>
         <ProtectedRoute
           exact
           path="/dashboard/admin/bot"

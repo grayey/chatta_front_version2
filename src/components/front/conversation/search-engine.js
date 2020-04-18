@@ -3,7 +3,7 @@ export default class SearchEngine {
     this.chat_body = chat_body;
   }
 
-  search = async sentence => {
+  search = async (sentence) => {
     const relatedResult = [];
     let exactResult = { matchedTag: "" };
     const duplicateResults = [];
@@ -11,7 +11,7 @@ export default class SearchEngine {
     const duplicateExactButtonMatch = [];
     const relatedButtonMatch = [];
     const input = sentence.toLowerCase();
-    this.chat_body.filter(convo => {
+    this.chat_body.filter((convo) => {
       let buttons = convo.response.buttons;
 
       if (buttons && buttons.length) {
@@ -19,11 +19,11 @@ export default class SearchEngine {
 
         for (let index = 0; index < buttons.length; index += 1) {
           if (buttons[index].tags) {
-            buttons[index].tags.filter(tag => {
+            buttons[index].tags.filter((tag) => {
               if (input.includes(tag)) {
                 if (
                   !relatedResult.filter(
-                    result => result.identity === convo.identity
+                    (result) => result.identity === convo.identity
                   ).length
                 ) {
                   relatedResult.push(convo);
@@ -37,7 +37,7 @@ export default class SearchEngine {
                     buttonValue: buttons[index].val,
                     buttonKey: buttons[index].key,
                     matchedTag: tag,
-                    tags: buttons[index].tags
+                    tags: buttons[index].tags,
                   };
                 }
                 if (
@@ -49,7 +49,7 @@ export default class SearchEngine {
                     buttonValue: buttons[index].val,
                     buttonKey: buttons[index].key,
                     matchedTag: tag,
-                    tags: buttons[index].tags
+                    tags: buttons[index].tags,
                   });
                 }
               }
@@ -65,25 +65,32 @@ export default class SearchEngine {
                   buttonValue: buttons[index].val,
                   buttonKey: buttons[index].key,
                   matchedTag: "",
-                  tags: []
+                  tags: [],
                 };
               }
 
             if (
               exactButtonMatch.buttonValue === buttons[index].val &&
-              exactButtonMatch.buttonKey !== buttons[index].key
+              exactButtonMatch.buttonKey !== buttons[index].key &&
+              convo.identity !== "empty" &&
+              convo.identity !== "delay_prompt"
             ) {
-              duplicateExactButtonMatch.push({
-                parentButtonKey: convo.identity,
-                buttonValue: buttons[index].val,
-                buttonKey: buttons[index].key,
-                matchedTag: "",
-                tags: []
-              });
+              const exists = duplicateExactButtonMatch.filter(
+                (match) => match.buttonKey !== buttons[index].key
+              );
+              if (!exists.length) {
+                duplicateExactButtonMatch.push({
+                  parentButtonKey: convo.identity,
+                  buttonValue: buttons[index].val,
+                  buttonKey: buttons[index].key,
+                  matchedTag: "",
+                  tags: [],
+                });
+              }
             }
             if (
               !relatedButtonMatch.filter(
-                match => match.parentButtonKey === convo.identity
+                (match) => match.parentButtonKey === convo.identity
               ).length
             ) {
               relatedButtonMatch.push({
@@ -91,7 +98,7 @@ export default class SearchEngine {
                 buttonValue: buttons[index].val,
                 buttonKey: buttons[index].key,
                 matchedTag: "",
-                tags: []
+                tags: [],
               });
             }
           }
@@ -104,18 +111,20 @@ export default class SearchEngine {
       relatedKeyWordResult: relatedResult,
       exactButtonMatch,
       duplicateExactButtonMatch,
-      relatedButtonMatch
+      relatedButtonMatch,
     });
     if (!result) {
       const output = await this.findByPrompts(sentence);
       if (output.keywordMatch >= 1) result = output.convo;
-      else result = await this.getButtonResult("empty");
+      else result = await this.findById("empty");
     }
-
-    console.log("rez", result);
     return result;
   };
-  findByPrompts = sentence => {
+  findById = (id, tree) => {
+    const chatBody = tree || this.chat_body;
+    return chatBody.filter((convo) => convo.identity === id)[0];
+  };
+  findByPrompts = (sentence) => {
     const input = sentence.toLowerCase().split(" ");
     let convo;
     let keywordMatch = 0;
@@ -124,7 +133,7 @@ export default class SearchEngine {
       const convoBody = this.chat_body[index];
       const prompt = convoBody.prompt.toLowerCase();
       let count = 0;
-      input.forEach(word => {
+      input.forEach((word) => {
         if (prompt.includes(word)) {
           count += 1;
         }
@@ -134,15 +143,13 @@ export default class SearchEngine {
         keywordMatch = count;
       }
     }
-    console.log("keyword match", keywordMatch);
     return { convo, keywordMatch };
   };
-  buildResult = async rawResult => {
-    console.log(rawResult);
+  buildResult = async (rawResult) => {
     const options = [];
     let buttonVal;
     let matchedTag;
-    if (rawResult.duplicateExactButtonMatch.length) {
+    if (rawResult.duplicateExactButtonMatch.length > 1) {
       rawResult.duplicateExactButtonMatch.push(rawResult.exactButtonMatch);
       for (
         let index = 0;
@@ -155,7 +162,7 @@ export default class SearchEngine {
         buttonVal = result.buttonValue;
         const newButton = {
           key: result.buttonKey,
-          val: `${result.buttonValue} (${buttonText})`
+          val: `${result.buttonValue} (${buttonText})`,
         };
         options.push(newButton);
       }
@@ -163,8 +170,8 @@ export default class SearchEngine {
         identity: "random-string",
         prompt: `Here are some of the options we have for ${buttonVal}`,
         response: {
-          buttons: options
-        }
+          buttons: options,
+        },
       };
     } else if (
       rawResult.exactButtonMatch.parentButtonKey &&
@@ -184,23 +191,23 @@ export default class SearchEngine {
       ) {
         result = rawResult.exactButtonMatch;
       }
-      const output = await this.getButtonResult(result.buttonKey);
-      const fallback = await this.getButtonResult("empty");
+      const output = await this.findById(result.buttonKey);
+      const fallback = await this.findById("empty");
 
       if (!output && (result.buttonValue.length || result.matchedTag)) {
-        const prompt = `Sorry, we currently do not have option ${result.buttonValue ||
-          result.matchedTag} available. We are working to make sure we include ${result.buttonValue ||
-          result.matchedTag} in the list of our services. Meanwhile you might want to checkout the services below`;
+        const prompt = `Sorry, we currently do not have the option "${
+          result.buttonValue || result.matchedTag
+        }" available. We are working to make sure we include this option in the list of our services. Meanwhile you might want to checkout the services below`;
         const convo = {
           identity: "not-available",
           prompt,
           response: {
-            buttons: fallback.response.buttons
-          }
+            buttons: fallback.response.buttons,
+          },
         };
         return convo;
       }
-      return await this.getButtonResult(result.buttonKey);
+      return await this.findById(result.buttonKey);
     } else if (rawResult.duplicateKeywordResult.length) {
       rawResult.duplicateKeywordResult.push(rawResult.exactKeywordResult);
       for (
@@ -215,7 +222,7 @@ export default class SearchEngine {
         buttonVal = result.buttonValue;
         const newButton = {
           key: result.buttonKey,
-          val: `${result.buttonValue} (${button.val})`
+          val: `${result.buttonValue} (${button.val})`,
         };
         options.push(newButton);
       }
@@ -223,8 +230,8 @@ export default class SearchEngine {
         identity: "random-string",
         prompt: `Here are some of the options we have for ${matchedTag}`,
         response: {
-          buttons: options
-        }
+          buttons: options,
+        },
       };
     } else if (
       rawResult.exactKeywordResult.parentButtonKey &&
@@ -232,12 +239,12 @@ export default class SearchEngine {
       rawResult.exactKeywordResult.parentButtonKey !== "empty" &&
       !rawResult.duplicateExactButtonMatch.length
     ) {
-      return await this.getButtonResult(rawResult.exactKeywordResult.buttonKey);
+      return await this.findById(rawResult.exactKeywordResult.buttonKey);
     }
   };
-  getParent = buttonKey => {
+  getParent = (buttonKey) => {
     const matchedButton = [];
-    this.chat_body.filter(convo => {
+    this.chat_body.filter((convo) => {
       const { buttons } = convo.response;
       for (let index = 0; index < buttons.length; index += 1) {
         if (buttons[index].key === buttonKey) {
@@ -248,17 +255,23 @@ export default class SearchEngine {
     });
     return matchedButton[0];
   };
-  getButtonResult = buttonKey => {
-    let conversation;
-    for (let index = 0; index < this.chat_body.length; index += 1) {
-      const convo = this.chat_body[index];
-      if (convo.identity === buttonKey) {
-        conversation = convo;
-        break;
-      } else {
-        conversation = false;
+  getParentButtonValue = (buttonKey) => {
+    let buttonValue;
+    this.chat_body.filter((convo) => {
+      const { buttons } = convo.response;
+      if (buttons && buttons.length) {
+        for (let index = 0; index < buttons.length; index += 1) {
+          if (buttons[index].key === buttonKey) {
+            const { identity } = convo;
+            if (identity) {
+              const parentButton = this.getParent(identity);
+              buttonValue = parentButton.val;
+              break;
+            }
+          }
+        }
       }
-    }
-    return conversation;
+    });
+    return buttonValue;
   };
 }
