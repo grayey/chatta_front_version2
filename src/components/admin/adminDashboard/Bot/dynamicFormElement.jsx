@@ -33,7 +33,8 @@ class FormsPage extends React.Component {
             editMode: false,
             formInputEditedIndex: null,
             addOptions: false,
-            extraField: 0
+            extraField: 0,
+            companyId: null,
 
         };
 
@@ -65,6 +66,8 @@ class FormsPage extends React.Component {
         if (editMode) {
             inputFields.splice(formInputEditedIndex, 1, formInput)//update entry
         } else {
+            const input_name = formInput.input_label.toLocaleLowerCase().split(' ').join('_');
+            formInput.input_name = input_name;
             inputFields.push(formInput);// create new entry
         }
 
@@ -146,6 +149,7 @@ class FormsPage extends React.Component {
         event.preventDefault();
         this.setState({ showProgress: true });
         const formObject = { ...this.state.formDetails };
+        formObject['company_id'] = this.state.companyId;
         formObject['form_fields'] = this.state.inputFields;
         if (!this.props.editFormObject) { // Create
             this.appService.createForm(formObject).then(res => {
@@ -159,8 +163,8 @@ class FormsPage extends React.Component {
                 });
         } else { // Update
             this.appService.updateForm(this.props.editFormObject._id, formObject).then(res => {
-                this.props.updateFormRecord(res);
                 this.props.toggle();
+                this.props.updateFormRecord(res);
             }).catch(err => {
                 console.log(err);
                 this.setState({ showProgress: false });
