@@ -32,6 +32,7 @@ import DatePicker from "../src/components/admin/adminDashboard/analytics/dates";
 import BotBody from "./components/admin/adminDashboard/Bot/bot-body";
 import PaymentPage from "./pages/checkout/cardForm";
 import Tags from "./components/admin/adminDashboard/Bot/tag-overlay";
+import ManageFormsComponent from "./components/admin/adminDashboard/form-builder/manageforms";
 
 function App() {
   return (
@@ -106,6 +107,15 @@ function App() {
           path="/auth/password-reset"
           component={VerifyNewPassword}
         ></Route>
+
+
+        <Route
+          exact
+          path="/dashboard/admin/forms"
+          component={ManageFormsComponent}
+        ></Route>
+
+
         <Route
           exact
           path="/auth/recover-password"

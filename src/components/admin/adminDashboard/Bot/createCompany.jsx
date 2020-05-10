@@ -3,12 +3,12 @@ import { MDBContainer, MDBBtn, MDBModal, MDBModalBody, MDBModalHeader } from 'md
 import CompanyForm from '../Bot/createCompanyForm';
 
 class ModalPage extends Component {
-    
-    constructor(props){
+
+    constructor(props) {
         super(props);
     }
     state = {
-        modal14: this.props.isRegistered?true:false
+        modal14: this.props.isRegistered ? true : false
     }
 
     toggle = nr => () => {
@@ -21,7 +21,7 @@ class ModalPage extends Component {
     render() {
         return (
             <div>
-                {this.props.isRegistered?"":<button className="btn btn-outline-light ml-1 waves-effect waves-light"
+                {this.props.isRegistered ? "" : <button className="btn btn-outline-light ml-1 waves-effect waves-light"
                     onClick={this.toggle(14)}>CREATE COMPANY +</button>}
                 <MDBContainer>
 

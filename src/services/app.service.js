@@ -46,7 +46,7 @@ export class AppService extends Component {
      * Companies Section Srtarts
      */
 
- cre
+
 
 
 
@@ -149,5 +149,77 @@ export class AppService extends Component {
     }
 
 
+
+
+
+    //FORMS AREA
+
+
+    /**
+   * 
+   * @param {*} data 
+   * This method creates a new Form
+   */
+    async createForm(data) {
+        return await apiService.post('forms', data);
+    }
+
+    /**
+     *  This method gets all forms
+     */
+    async getAllForms() {
+        return await apiService.get('forms');
+    }
+
+
+    /**
+     * 
+     * @param {*} id 
+     * 
+     * This method gets a Form by it's Id
+     */
+    async getFormById(id) {
+        return await apiService.get('forms', id);
+
+    }
+
+
+    /**
+     * 
+     * @param {*} id 
+     * 
+     * This method deletes a Form
+     */
+    async deleteForm(id) {
+        const url = `forms/${id}`;
+        return await apiService.del(url);
+    }
+
+
+    /**
+     * 
+     * @param {*} id 
+     * @param {*} data 
+     * 
+     * This method updates a Form
+     */
+    async updateForm(id, data) {
+        const url = `forms/${id}`;
+        return await apiService.put(url, data);
+    }
+
+
+    /**
+     * 
+     * @param {*} id 
+     * @param {*} data 
+     * 
+     * This method toggles a Form's enabled status
+     */
+
+    async toggleForm(id, data) {
+        const url = `forms/${id}`;
+        return await apiService.patch(url, data);
+    }
 
 }

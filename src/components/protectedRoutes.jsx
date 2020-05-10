@@ -10,7 +10,7 @@ export const ProtectedRoute = ({
         <Route
             {...rest}
             render={props => {
-                if (isAuthenticated()) {
+                if (!isAuthenticated()) { // '!' EMEKA's ADDITION please remove when you can legally login
                     return <Component {...props} />;
                 } else {
                     return (
