@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { setGlobal, useGlobal } from "reactn";
 
 import { MDBDataTable } from 'mdbreact';
@@ -57,9 +57,9 @@ const DatatablePage = (props) => {
         rows: [
             ...props.allDynamicForms.map((dynamicForm, index) => {
 
-                let dynamicFormListItem = {}
-                dynamicFormListItem.form_name = dynamicForm.form_name;
-                dynamicFormListItem.action_url = dynamicForm.action_url;
+                const dynamicFormListItem = { ...dynamicForm }
+                // dynamicFormListItem.form_name = dynamicForm.form_name;
+                // dynamicFormListItem.action_url = dynamicForm.action_url;
                 dynamicFormListItem.status = <Switch key={dynamicForm.action_url}
                     onClick={() => {
                         props.toggleSwitch(
@@ -67,9 +67,8 @@ const DatatablePage = (props) => {
                         )
                     }}
                     on={!!dynamicForm._id} />
-                const formDate = new Date().toISOString();
-                dynamicFormListItem.created_at = moment(formDate).format('Do-MMMM-YYYY, LT');
-                dynamicFormListItem.updated_at = moment(formDate).format('Do-MMMM-YYYY, LT');
+                dynamicFormListItem.created_at = moment(dynamicFormListItem.created_at).format('Do-MMMM-YYYY, LT');
+                dynamicFormListItem.updated_at = moment(dynamicFormListItem.updated_at).format('Do-MMMM-YYYY, LT');
                 dynamicFormListItem.action = <div className="button-items">
                     {/* <Link
                         to={`/dashboard/admin/company/${dynamicForm._id || index}`}
@@ -78,7 +77,7 @@ const DatatablePage = (props) => {
                         type="button"
                         className="btn btn-secondary btn-sm waves-effect"
                         onClick={() => {
-                            props.openEditForm(dynamicForm);
+                            props.openEditForm(dynamicFormListItem);
                         }}
                     >
                         <MDBIcon icon="pencil-alt" />&nbsp;
@@ -89,7 +88,7 @@ const DatatablePage = (props) => {
                         type="button"
                         className="btn  btn-red btn-sm waves-effect"
                         onClick={() => {
-                            props.confirmDelete(dynamicForm);
+                            props.confirmDelete(dynamicFormListItem);
                         }}
                     ><MDBIcon icon="trash-alt" />
 

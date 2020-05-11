@@ -6,12 +6,14 @@ import CompanyModal from "../adminDashboard/Bot/createCompany"
 import "./layouts.style.css";
 import { MDBIcon } from "mdbreact";
 import { Redirect } from "react-router-dom";
+import AppNotification from "../../../utilities/notification/app-notification";
 
 export default class LayoutHeader extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedStatus: false
+      loggedStatus: false,
+      showNotification: false
     };
   }
 
@@ -20,6 +22,8 @@ export default class LayoutHeader extends Component {
     localStorage.clear();
     this.setState({ loggedStatus: true });
   };
+
+
 
   render() {
     const avatar1 = <MDBIcon far icon="user-circle" size="2x" />;
@@ -214,10 +218,10 @@ export default class LayoutHeader extends Component {
 
         {/* <div className="container-fluid"> */}
         {/* <!-- Page-Title --> */}
-        {/* <div>
-                        <AppNotification msg={this.props.notification.msg}
-                            type={this.props.notification.type} />
-                    </div> */}
+
+        {/* <AppNotification msg={this.props.notification.msg}
+          type={this.props.notification.type} /> */}
+
 
         {/* <div className="row"> */}
         {/* <div className="col-sm-12"> */}

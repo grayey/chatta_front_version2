@@ -154,7 +154,6 @@ class FormsPage extends React.Component {
         if (!this.props.editFormObject) { // Create
             this.appService.createForm(formObject).then(res => {
                 this.props.createNewRecord(res);
-                this.props.toggle();
                 this.setState({ message: `${formObject.form_name} Created!`, showProgress: false });
             })
                 .catch(err => {
@@ -162,9 +161,10 @@ class FormsPage extends React.Component {
                     this.setState({ showProgress: false });
                 });
         } else { // Update
-            this.appService.updateForm(this.props.editFormObject._id, formObject).then(res => {
-                this.props.toggle();
-                this.props.updateFormRecord(res);
+            const editFormObject = { ...this.props.editFormObject };
+            this.appService.updateForm(editFormObject._id, formObject).then(res => {
+                this.props.createNewRecord(res,true);
+                // this.props.toggle();
             }).catch(err => {
                 console.log(err);
                 this.setState({ showProgress: false });
@@ -185,7 +185,7 @@ class FormsPage extends React.Component {
 
     fieldIsRequired = (isRequired) => {
         return (
-            isRequired ? <span style={{ color: 'red' }}>*</span> : null
+            isRequired.toLowerCase() == 'true' ? <span style={{ color: 'red' }}>*</span> : null
         )
 
     }
@@ -504,8 +504,8 @@ class FormsPage extends React.Component {
 
                                     <select disabled={!this.state.canEnable} name="is_required" value={this.state.formInput.is_required} onChange={this.handleFormInputChange} className="form-control" required>
                                         <option value=""></option>
-                                        <option value="no">No</option>
-                                        <option value="yes">Yes</option>
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
                                     </select>
                                 </div>
 

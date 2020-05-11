@@ -26,7 +26,7 @@ export default class AppNotification extends Component {
         const tab = await this.global.getTab();
         if (tab === "template") this.props.resetNotification();
       }
-    }, props.timeOut || 8000);
+    }, this.props.timeOut || 8000);
   }
 
   render() {

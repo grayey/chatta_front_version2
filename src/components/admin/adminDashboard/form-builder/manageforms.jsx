@@ -47,11 +47,17 @@ export default class ManageFormsComponent extends Component {
         this.getAllForms();
     }
 
-    incrementFormsList = (formObject) => {
-        const allDynamicForms = [...this.state.allDynamicForms];
-        allDynamicForms.push(formObject);
-        console.log('Parent found form object', formObject);
-        this.setState({ allDynamicForms });
+    incrementFormsList = (formObject, edit = false) => {
+        if (!edit) {
+            const allDynamicForms = [...this.state.allDynamicForms];
+            allDynamicForms.push(formObject);
+            console.log('Parent found form object', formObject);
+            this.setState({ allDynamicForms });
+        } else {
+
+            this.updateFormRecord(formObject);
+        }
+
     }
 
     getAllForms = async () => {
@@ -111,7 +117,8 @@ export default class ManageFormsComponent extends Component {
                         ...this.state.allDynamicForms.filter(
                             form => form._id !== dynamicForm._id
                         )
-                    ]
+                    ],
+                    showEditForm: !this.state.showEditForm && false,
                 });
             }).catch(err => {
                 console.error(err)
@@ -166,16 +173,20 @@ export default class ManageFormsComponent extends Component {
         let { showEditForm } = this.state;
         const editFormObject = formObject ? { ...formObject } : null;
         showEditForm = !showEditForm;
-        console.log('Dynamic FormmToggle', formObject);
         this.setState({ showEditForm, editFormObject })
     }
 
-    updateFormRecord(formObject) {
+    updateFormRecord = (formObject) => {
+        let { showEditForm } = this.state;
+        showEditForm = !showEditForm;
+
+        const allDynamicForms = this.state.allDynamicForms.map(form => {
+            return form = form._id === formObject._id ? formObject : form; // cleannnn
+        })
         this.setState({
-            allDynamicForms: this.state.allDynamicForms.map(form => {
-                return form._id === formObject._id;
-            }),
-            notification: { msg: `${formObject.form_name} updated!`, type: 'success' }
+            allDynamicForms,
+            notification: { msg: `${formObject.form_name} updated!`, type: 'success' },
+            showEditForm
         });
     }
 
@@ -232,7 +243,7 @@ export default class ManageFormsComponent extends Component {
                             <div className="col-sm-12">
                                 <div className="page-title-box">
 
-                                    <CreateFormModal showEditForm={this.state.showEditForm} editFormObject={this.state.editFormObject} createNewRecord={this.incrementFormsList} updateFormRecord={this.updateFormRecord} />
+                                    <CreateFormModal showEditForm={this.state.showEditForm} editFormObject={this.state.editFormObject} createNewRecord={this.incrementFormsList} />
                                     {/* <CreateUser
                     show={modalShow}
                     onHide={() => setModalShow(false)}
